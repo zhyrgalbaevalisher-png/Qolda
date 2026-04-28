@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Qolda</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    display: flex;
+}
+
+/* ЛЕВОЕ МЕНЮ */
+.sidebar {
+    width: 200px;
+    background: #111;
+    color: white;
+    height: 100vh;
+    padding: 20px;
+}
+
+.sidebar h2 {
+    color: yellow;
+}
+
+.sidebar button {
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    border: none;
+    background: yellow;
+    cursor: pointer;
+}
+
+/* ОСНОВНАЯ ЧАСТЬ */
+.main {
+    flex: 1;
+    background: #FFD700;
+    padding: 20px;
+    text-align: center;
+}
+
+.logo {
+    width: 200px;
+}
+
+/* КАРТОЧКИ */
+.card {
+    background: white;
+    padding: 15px;
+    margin: 15px;
+    display: inline-block;
+    border-radius: 10px;
+    width: 180px;
+}
+
+button.buy {
+    background: black;
+    color: white;
+    padding: 8px;
+    border: none;
+    cursor: pointer;
+}
+</style>
+
+</head>
+<body>
+
+<!-- МЕНЮ -->
+<div class="sidebar">
+    <h2>Qolda</h2>
+    <button onclick="showPage('home')">Главная</button>
+    <button onclick="showPage('bookings')">Забронированное</button>
+    <button>Выставить товар</button>
+</div>
+
+<!-- КОНТЕНТ -->
+<div class="main" id="home-page">
+
+<img src="logo.png.png" class="logo">
+<h1>Аренда вещей</h1>
+
+<div class="card">
+    <h3>Дрель</h3>
+    <p>2000 тг/день</p>
+    <button class="buy" onclick="rent('Дрель', '2000 тг/день')">Арендовать</button>
+</div>
+
+<div class="card">
+    <h3>Камера</h3>
+    <p>5000 тг/день</p>
+    <button class="buy" onclick="rent('Камера', '5000 тг/день')">Арендовать</button>
+</div>
+
+<div class="card">
+    <h3>Велосипед</h3>
+    <p>3000 тг/день</p>
+    <button class="buy" onclick="rent('Велосипед', '3000 тг/день')">Арендовать</button>
+</div>
+
+<div class="card">
+    <h3>Стулья</h3>
+    <p>1000 тг/день</p>
+    <button class="buy" onclick="rent('Стулья', '1000 тг/день')">Арендовать</button>
+</div>
+
+<div class="card">
+    <h3>Ноутбук</h3>
+    <p>8000 тг/день</p>
+    <button class="buy" onclick="rent('Ноутбук', '8000 тг/день')">Арендовать</button>
+</div>
+
+</div>
+
+<!-- СТРАНИЦА ЗАБРОНИРОВАННОГО -->
+<div class="main" id="bookings-page" style="display: none;">
+<h1>Забронированные товары</h1>
+<div id="bookings-list">
+    <p>У вас пока нет забронированных товаров.</p>
+</div>
+</div>
+
+<script>
+let bookings = [];
+
+function rent(itemName, price) {
+    bookings.push({ name: itemName, price: price });
+    alert("Товар забронирован!");
+    updateBookingsPage();
+}
+
+function showPage(page) {
+    document.getElementById('home-page').style.display = page === 'home' ? 'block' : 'none';
+    document.getElementById('bookings-page').style.display = page === 'bookings' ? 'block' : 'none';
+}
+
+function updateBookingsPage() {
+    const container = document.getElementById('bookings-list');
+    if (bookings.length === 0) {
+        container.innerHTML = '<p>У вас пока нет забронированных товаров.</p>';
+    } else {
+        container.innerHTML = bookings.map(item => `
+            <div class="card">
+                <h3>${item.name}</h3>
+                <p>${item.price}</p>
+                <button class="buy" onclick="cancelBooking('${item.name}')">Отменить</button>
+            </div>
+        `).join('');
+    }
+}
+
+function cancelBooking(itemName) {
+    bookings = bookings.filter(b => b.name !== itemName);
+    updateBookingsPage();
+    alert('Бронирование отменено!');
+}
+</script>
+
+</body>
+</html>
